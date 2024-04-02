@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="container mx-auto py-8 px-4 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2  lg:grid-cols-4 gap-8">
             <div className="space-y-4  md:order-last">
-              <h1 className="text-3xl font-bold font-">E-Commerce</h1>
+              <h1 className="text-3xl font-bold font-">ECommerce</h1>
               <ul className="flex space-x-4 ">
                 <li><a href><i className="text-2xl fa-brands fa-whatsapp" /></a></li>
                 <li><a href><i className="text-2xl fa-brands fa-facebook" /></a></li>
