@@ -1,0 +1,28 @@
+.container { /* Set the height of the container */
+    overflow: hidden;
+}
+
+/* Make the image fill the container */
+.container img {
+    @apply w-full; /* Use Tailwind CSS utility classes */
+    transition: transform 0.3s ease; /* Add a smooth transition effect */
+}
+
+/* Increase the size on hover */
+.container:hover img {
+    @apply transform scale-125; /* Use Tailwind CSS utility classes */
+}
+
+.gradient-overlay {
+   
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  
+ .gradient-overlay:hover {
+    background: rgba(0, 0, 0, 0.37);
+  }
+  
