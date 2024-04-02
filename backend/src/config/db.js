@@ -1,9 +1,12 @@
-import mongoose from "mongoose";
+import dotenv from 'dotenv';
+dotenv.config();
 
-const mongodbUrl = "mongodb+srv://omhedau01:zw8rbTdi9JU6GPVI@cluster0.azwret0.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+import mongoose from 'mongoose';
 
-const connectDb = () =>{
+const mongodbUrl = process.env.MONGODB_URL;
+
+const connectDb = () => {
     return mongoose.connect(mongodbUrl);
-}  
+};
 
-export {connectDb};
+export { connectDb };

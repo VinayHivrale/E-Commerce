@@ -11,6 +11,9 @@ import cartRouter from "./routes/cart.route.js";
 import cartItemRouter from "./routes/cartItem.route.js";
 import orderRouter from "./routes/order.route.js";
 
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 
 const app = express();
