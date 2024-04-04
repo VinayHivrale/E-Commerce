@@ -1,23 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { getUser, registerUser } from "../../redux/reducer/userSlice";
+import { getUser, register } from "../../redux/actions/authActions";
+
 
 const Registration = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const jwt = useSelector(state => state.jwt);
+  const jwt = localStorage.getItem('jwt');
+  const {auth}= useSelector(store=>store);
+  
 
-  const handleRegistration = (event) => {
-    // Add your registration logic here
-    event.preventDefault();
+  useEffect(()=>{
+    if(jwt){
+      dispatch(getUser(jwt))
+    }
+  },[jwt])
 
-    const data = new FormData(event.currentTarget);
+  const handleRegistration = (e) => {
+    e.preventDefault();
+
+    const data = new FormData(e.currentTarget);
 
     const userData = {
       firstName: data.get("firstName"),
@@ -26,20 +33,18 @@ const Registration = () => {
       password: data.get("password"),
     };
 
-    console.log(
-      "userData is : ", userData
-    );
-    dispatch(registerUser(userData));
-    
+    console.log("userData in registration : ", userData);
+    dispatch(register(userData))
+    .then(() => {
+      navigate('/')
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
   };
 
-  useEffect(()=>{
-      if(jwt){
-        dispatch(getUser());
-      }
-  },[jwt]);
-
-
+  
+  
 
   const handleGoogleLogin = () => {
     // Add your Google login logic here
@@ -47,38 +52,40 @@ const Registration = () => {
   };
 
   return (
-    <div className="bg-blue-200 ">
+    <div className="bg-blue-200 flex items-center justify-center h-screen">
       {/* Registration section */}
-      <div className="bg-[#f9f5ed] p-8 rounded shadow-md md:w-1/2 w-full m-auto">
-        <form  onSubmit={handleRegistration}>
+      <div className="bg-[#f9f5ed] p-8 rounded-xl shadow-md md:w-[500px] w-full h-fit m-auto">
+        <form onSubmit={handleRegistration}>
           <h2 className="text-2xl font-extrabold mb-6 text-[#2F3C7E]">
             Register.
           </h2>
-          <div className="mb-4">
-            <label htmlFor="firstName" className="block text-[#2F3C7E]">
-              firstName
-            </label>
-            <input
-              type="text"
-              id="firstName"
-              name="firstName"
-              className="w-full px-4 py-2 border rounded mt-1 focus:outline-none focus:border-blue-500"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="lastName" className="block text-[#2F3C7E]">
-              lastName
-            </label>
-            <input
-              type="text"
-              id="lastName"
-              name="lastName"
-              className="w-full px-4 py-2 border rounded mt-1 focus:outline-none focus:border-blue-500"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-            />
+          <div className="flex justify-between gap-5">
+            <div className="mb-4 w-full">
+              <label htmlFor="firstName" className="block text-[#2F3C7E]">
+                firstName
+              </label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                className="w-full px-4 py-2 border rounded mt-1 focus:outline-none focus:border-blue-500"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+            </div>
+            <div className="mb-4 w-full">
+              <label htmlFor="lastName" className="block text-[#2F3C7E]">
+                lastName
+              </label>
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                className="w-full px-4 py-2 border rounded mt-1 focus:outline-none focus:border-blue-500"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+              />
+            </div>
           </div>
           <div className="mb-4">
             <label htmlFor="email" className="block text-[#2F3C7E]">
@@ -98,19 +105,14 @@ const Registration = () => {
               Password
             </label>
             <input
-              type={showPassword ? "text" : "password"}
+              type="password"
               id="password"
               name="password"
               className="w-full px-4 py-2 border rounded mt-1 focus:outline-none focus:border-blue-500"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <button
-              className="absolute top-1/2 right-4 cursor-pointer"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? "👁️" : "👁️‍🗨️"}
-            </button>
+            
           </div>
           <button
             type="submit"
@@ -137,7 +139,7 @@ const Registration = () => {
             onClick={handleGoogleLogin}
           >
             <img
-              src="../src/assets/google.png" // Replace with your Google icon image path
+              src="../src/assets/google.png" 
               alt="Google Icon"
               className="mr-2 w-5 h-5"
             />

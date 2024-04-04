@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch,useSelector } from "react-redux";
 import { Link,useNavigate } from "react-router-dom";
-import { loginUser } from "../../redux/reducer/userSlice";
-
+import { login } from "../../redux/actions/authActions";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -10,31 +9,27 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {loading, error} = useSelector((state)=>state.user); 
+  const {auth} = useSelector(store=>store)
 
-  const handleLogin = (event) => {
-    // Add your login logic here
-    event.preventDefault();
 
-    const data = new FormData(event.currentTarget);
+  const handleLogin = (e) => {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
 
     const userData = {
       email: data.get("email"),
       password: data.get("password"),
     };
 
-    
-    console.log(
-      "login Data is : ",userData
-    );
+    console.log("login Data is : ",userData );
 
-    dispatch(loginUser(userData)).then((result)=>{
-      if(result.payload){
-        setEmail('');
-        setPassword('');
-        navigate('/');
-      }
+    dispatch(login(userData))
+    .then(() => {
+      navigate('/')
     })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
   };
 
   const handleGoogleLogin = () => {
@@ -43,18 +38,11 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center bg-blue-200">
+    <div className="flex h-screen items-center justify-center bg-blue-200">
       {/* Image on the left (hidden on small screens) */}
-      <div className="hidden md:block md:w-1/2">
-        <img
-          src="../src/assets/shopping.png" // Replace with your image path
-          alt="Shopping Icon"
-          className="w-full h-[510px] object-cover object-top"
-        />
-      </div>
 
       {/* Login section */}
-      <div className="bg-[#f9f5ed] p-8 rounded shadow-md md:w-1/2 w-full">
+      <div className="bg-[#f9f5ed] p-8 rounded-xl shadow-md md:w-[500px] w-full">
         <form onSubmit={handleLogin}>
           <h2 className="text-2xl font-extrabold mb-6 text-[#2F3C7E]">
             Login.
@@ -84,21 +72,15 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <button
-              className="absolute top-1/2 right-4 cursor-pointer"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? "👁️" : "👁️‍🗨️"}
-            </button>
           </div>
           <button
             className="w-full bg-[#2F3C7E] text-gray-100 py-2 rounded hover:shadow-md focus:outline-none mb-4"
             type="submit"
           >
-           {loading?"loading...":"login"}
+           {auth.isLoading?"loading...":"login"}
           </button>
           {
-            error && <div className=" text-red-700">{error}</div>
+            auth.error && <div className=" text-red-700">{auth.error}</div>
           }
         </form>
         <div className="mb-4">

@@ -86,7 +86,7 @@ const Shopping = () => {
       <div>
         <main className="mx-auto w-full px-4 sm:px-6 lg:px-8 bg-white">
           <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-10">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900">New Arrivals</h1>
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900">shopsy</h1>
             <div className="flex items-center">
               <Menu as="div" className="relative inline-block text-left">
                 <div>
@@ -145,30 +145,21 @@ const Shopping = () => {
               Products
             </h2>
             <div className="grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-6">
-              {/* Filters */}
+
+              {/* Filters -----------------------------------------*/}
               <form className="hidden lg:block col-span-1 " onSubmit={(e) => e.preventDefault()}>
-                <div className="flex flex-wrap">
-                  <div className="w-auto bg-[#3835351e] px-2 py-1 text-black rounded-md mb-2 mr-1">
-                    <p>blue <span className="ml-1"><ClearIcon sx={{fontSize:'17px'}} /></span></p>
-                  </div>
-                </div>
-                
                 <CustomDisclosure filters={filters} singleFilters={singleFilters} />
               </form>
-              {/* Product grid */}
 
+
+
+              {/* Product grid ------------------------------------*/}
               <div className="col-span-6 lg:col-span-5">{<Product />}</div>
             </div>
           </section>
 
           <div className='flex justify-center items-center -mt-16 mb-7'>
-            <Pagination
-
-              count={10}
-              color='standard'
-            >
-
-            </Pagination>
+          <Pagination count={10} variant="outlined" shape="rounded" sx={{color:"#000000",bgcolor:"#BFDBFE"}} />
           </div>
 
         </main>

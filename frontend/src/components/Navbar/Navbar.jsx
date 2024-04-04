@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import SearchIcon from "@mui/icons-material/Search";
@@ -7,9 +7,12 @@ import MenuIcon from "@mui/icons-material/Menu";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import Navbarhidden from "./Navbarhidden";
 import Sidebar from "../Sidebar/Sidebar";
+import { getUser, logout } from "../../redux/actions/authActions";
+import { Avatar } from "@mui/material";
 import "./Navbar.css";
-
 import { Outlet, Link } from "react-router-dom";
+import { deepOrange } from "@mui/material/colors";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Navbar() {
   const [isTrue, setIsTrue] = useState(false);
@@ -18,9 +21,25 @@ export default function Navbar() {
   const [searchToggle, setSearchToddle] = useState(false);
   const [siderbar, setSiderbar] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const jwt = localStorage.getItem("jwt");
+  const dispatch = useDispatch();
+  const { auth } = useSelector((store) => store);
+
+  useEffect(() => {
+    if (jwt) {
+      dispatch(getUser(jwt));
+    }
+  }, [jwt]);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
+    console.log(user);
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+    setIsOpen(false);
+    console.log(auth);
   };
 
   function handleOver(category, color) {
@@ -122,30 +141,42 @@ export default function Navbar() {
         </div>
 
         <div className="Navbar-icons hidden lg:flex mt-[20px] items-center w-fit pb-[15px] font-sans">
-            <div className=" text-center text-[12px] ">
-              <div className="relative inline-block text-center text-[12px]">
-                <div className=" cursor-pointer" onClick={toggleDropdown}>
-                  <PersonOutlinedIcon/>
-                  <p className="font-bold">Profile</p>
-                </div>
-                {isOpen && (
-                  <div className="absolute top-14 -left-10 z-10 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                    <div className="py-1">
-                      <Link to="/login" onClick={toggleDropdown}
-                        className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
-                      >
-                        Login
-                      </Link>
-                      <Link to="/profile" onClick={toggleDropdown}
-                        className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
-                      >
-                        Account
-                      </Link>
-                    </div>
-                  </div>
-                )}
+          <div className=" text-center text-[12px] ">
+            <div className="relative inline-block text-center text-[12px]">
+              <div className=" cursor-pointer" onClick={toggleDropdown}>
+                <Avatar
+                  className="text-black"
+                  sx={{
+                    bgcolor: deepOrange[400],
+                    color: "black",
+                    cursor: "pointer",
+                  }}
+                >
+                  {auth.user?.firstName[0].toUpperCase()}
+                </Avatar>
               </div>
+              {isOpen && (
+                <div className="absolute top-14 -left-10 z-10 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                  <div className="py-1">
+                    <Link
+                      to={auth.user ? "/" : "/login"}
+                      onClick={auth.user?handleLogout:toggleDropdown}
+                      className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                    >
+                      {auth.user ? "logout" : "login"}
+                    </Link>
+                    <Link
+                      to="/profile"
+                      onClick={auth.user ? handleLogout : toggleDropdown}
+                      className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                    >
+                      Account
+                    </Link>
+                  </div>
+                </div>
+              )}
             </div>
+          </div>
           <Link className="no-underline mx-7">
             <div className="text-center text-[12px] ">
               <FavoriteBorderIcon />
@@ -159,7 +190,6 @@ export default function Navbar() {
             </div>
           </Link>
         </div>
-
       </div>
 
       <div className="lg:hidden w-full bg-white shadow-xl text-black fixed top-0 z-10 lg:px-10">
@@ -196,19 +226,6 @@ export default function Navbar() {
                 <p className="p-0 m-0 font-bold">Profile</p>
               </div>
             </Link>
-
-            {/* <Link className=" hidden sm:block no-underline mx-4">
-              <div className="text-center text-[12px] ">
-                <FavoriteBorderIcon />
-                <p className="p-0 m-0 font-bold">Wishlist</p>
-              </div>
-            </Link>
-            <Link to="/cart-bag" className="hidden sm:block no-underline mx-4">
-              <div className="text-center text-[12px]">
-                <ShoppingCartIcon />
-                <p className="p-0 m-0 font-bold">Bag</p>
-              </div>
-            </Link> */}
           </div>
         </div>
         <div className={searchToggle ? "" : "hidden"}>

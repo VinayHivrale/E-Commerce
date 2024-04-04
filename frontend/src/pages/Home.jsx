@@ -4,7 +4,7 @@ import LandingCards from '../components/LandingCards/LandingCards';
 import NorthEastIcon from '@mui/icons-material/NorthEast';
 import { FashionType } from '../components/FashionCardExplore/FashionType';
 import CategoryContainer from '../components/CategoryCard/CategoryContainer';
-import Footer from '../components/footer/footer';
+import Footer from '../components/Footer/Footer.jsx';
 
 
 const Home = () => {
