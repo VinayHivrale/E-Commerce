@@ -96,6 +96,9 @@ async function getAllProduct(reqQuery) {
     pageSize,
   } = reqQuery;
 
+  
+  console.log("getting the reqdata in this form ",reqQuery);
+
   pageSize = pageSize || 10;
 
   let query = Product.find().populate("category");
@@ -117,23 +120,31 @@ async function getAllProduct(reqQuery) {
     const colorRegex = colorSet.size>0? new RegExp([...colorSet].join("|"),"i"):null;
 
     query = query.where("color").regex(colorRegex);
-
   }
 
-  if(sizes){
-    const sizesSet = new Set(sizes);
-    query.query.where("sizes.name").in([...sizesSet]);
-  }
 
-  if(maxPrice && maxPrice){
-    query = query.where("discountedPrice").gte(minPrice).filter(maxPrice);
-  }
+if (sizes) {
+  const sizesArray = sizes.split(',').map(size => size.trim());
+  console.log(sizesArray);
+  query = query.where("sizes.name").in(sizesArray);
+} else {
+  console.log("No sizes provided. No filtering applied.");
+}
 
-  if(minDiscount){
+
+  if (maxPrice !== undefined && minPrice !== undefined) {
+    try {
+      query = query.where("discountedPrice").gte(minPrice).lte(maxPrice);
+    } catch (error) {
+      console.error("Error building price filter:", error);
+    }
+  }
+   
+  if(minDiscount ){
     query = query.where("discountPercent").gte(minDiscount);
   }
 
-  if(stock){
+  if(stock ){
     if(stock=="in_stock"){
         query = query.where("quantity").gt(0);
     }
@@ -142,6 +153,7 @@ async function getAllProduct(reqQuery) {
     }
   }
 
+
   if(sort){
       const sortDirection = sort==="price_high"?-1:1;
       query = query.sort({discountedPrice:sortDirection});
@@ -149,13 +161,15 @@ async function getAllProduct(reqQuery) {
 
   const totalProducts = await Product.countDocuments(query);
 
-  const skip = (pageNumber-1) * pageSize;
+  const skip = Math.max((pageNumber - 1) * pageSize, 0);
 
   query = query.skip(skip).limit(pageSize);
 
   const products = await query.exec();
-
+  
   const totalPages = Math.ceil(totalProducts / pageSize);
+
+  console.log(products);
 
   return {content:products,currentPage:pageNumber,totalPages,}
 

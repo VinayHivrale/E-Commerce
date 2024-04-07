@@ -27,6 +27,7 @@ function App() {
       <div className="pt-20">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/:levelOne/:levelTwo/:levelThree" element={<Shopping />} />
           <Route path="/order" element={<OrderPage />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/product/1" element={<ProductDetail />} />
@@ -36,7 +37,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/cart" element={<Shopingcart />} />
           <Route path="/registration" element={<Registration />} />
-          <Route path="/product" element={<Shopping />} />
+          <Route path="/products" element={<Shopping />} />
           <Route path="/order-Detail" element={<OrderDetail />} />
         </Routes>
       </div>

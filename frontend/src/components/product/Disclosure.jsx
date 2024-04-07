@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { PlusIcon, MinusIcon } from '@heroicons/react/20/solid';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-const CustomDisclosure = ({ filters, singleFilters }) => {
+const Disclosure = ({ filters, singleFilters }) => {
   const [openSections, setOpenSections] = useState(Array(filters.length).fill(false));
   const [singleOpenSections, setSingleOpenSections] = useState(Array(singleFilters.length).fill(false));
   const navigate = useNavigate();
@@ -190,4 +190,4 @@ const CustomDisclosure = ({ filters, singleFilters }) => {
   );
 };
 
-export default CustomDisclosure;
+export default Disclosure;

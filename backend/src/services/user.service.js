@@ -26,8 +26,6 @@ const createUser = async (userData) => {
 const findUserById = async (userId) => {
   try {
     const user = await User.findById(userId);
-
-    console.log(" user from find user by id  ", user);
     
     if (!user) {
       throw new Error("user not found with id : ", userId);

@@ -10,7 +10,7 @@ import Sidebar from "../Sidebar/Sidebar";
 import { getUser, logout } from "../../redux/actions/authActions";
 import { Avatar } from "@mui/material";
 import "./Navbar.css";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link,useNavigate } from "react-router-dom";
 import { deepOrange } from "@mui/material/colors";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -24,6 +24,7 @@ export default function Navbar() {
   const jwt = localStorage.getItem("jwt");
   const dispatch = useDispatch();
   const { auth } = useSelector((store) => store);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (jwt) {
@@ -96,7 +97,7 @@ export default function Navbar() {
           />
 
           {isTrue && selectedCategory && (
-            <Navbarhidden category={selectedCategory} Color={selectedColor} />
+            <Navbarhidden category={selectedCategory} Color={selectedColor} handleLeave={handleLeave} />
           )}
         </div>
 

@@ -17,39 +17,27 @@ const ShoppingCart = () => {
         <Cart />
       </div>
       <div className='float-end  lg:float-none w-full h-fit md:w-[50%]'>
-        {/* Subtotal Section */}
         <div className='bg-[#fcf6f5ff] p-4 shadow-md'>
           <h2 className='text-lg font-bold mb-2 xs:mb-4'>Price Details</h2>
-          {/* Promo Code Section */}
-          {/* <div className='flex flex-wrap items-center gap-2 mb-5'>
-            <input
-              type='text'
-              placeholder='Enter Promo Code'
-              className='border p-1 rounded mr-2'
-            />
-            <button className='bg-[#2F3C7E] text-sm md:text-lg font-semibold text-white px-3 py-1 rounded'>
-              Apply
-            </button>
-          </div> */}
 
-          {/* Total Items Section */}
+
           <div className='flex text-sm md:text-base justify-between mb-2'>
             <p>Price (item 3)</p>
-            <p>₹4697</p> {/* Replace with dynamic total items */}
+            <p>₹4697</p> 
           </div>
           <div className='flex text-sm md:text-base  justify-between mb-2'>
             <p>Discount)</p>
-            <p>-₹2697</p> {/* Replace with dynamic total items */}
+            <p>-₹2697</p> 
           </div>
           <div className='flex text-sm md:text-base  justify-between mb-2'>
             <p>Delivery Charges</p>
-            <p>Free</p> {/* Replace with dynamic total items */}
+            <p>Free</p> 
           </div>
           <hr className='border-t border-blue-950 mb-4' />
-          {/* Total Price Section */}
+  
           <div className='flex text-sm md:text-base font-semibold justify-between '>
             <p>Total Amount:</p>
-            <p>₹5998</p> {/* Replace with dynamic total price */}
+            <p>₹5998</p> 
           </div>
           <div className='mt-6'>
             <button className='w-full text-sm md:text-lg bg-[#2F3C7E] font-semibold text-white px-3 py-1 rounded'>

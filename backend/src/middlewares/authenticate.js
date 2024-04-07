@@ -12,9 +12,8 @@ const authenticate = async (req,res,next) => {
         }
 
         const userId = await jwtProvider.getUserIdFromToken(token);
-        console.log(" user id from authenticate ", userId);
         const user = await userService.findUserById(userId);
-        console.log(" getting user from userId in authenticate ", user);
+        // console.log(" getting user from userId in authenticate ", user);
         req.user = user;
 
     } catch (error) {

@@ -41,6 +41,7 @@ const findProductById = async (req, res) => {
 
 const getAllProducts = async (req, res) => {
     try {
+        console.log("reaching upto getAllProducts in backen now")
         const products = await productService.getAllProduct(req.query);
         return res.status(200).send(products); // 200 for successful retrieval
     } catch (error) {

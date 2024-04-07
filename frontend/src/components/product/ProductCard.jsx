@@ -1,6 +1,5 @@
 import React from 'react'
 import StarIcon from '@mui/icons-material/Star';
-import "./Card.css"
 
 const product = {
     image: 'https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcRwNQ6jiZ45uCXbPNiAe8jKqh_yeHDYp_3Igil7-l4aq8zfxQ2tqsaHWPgqMXVJkFCPvBnfCj3Y8K3T1quL7CIfz6Bte_t5PXL3YCI4xGs&usqp=CAE',
@@ -13,7 +12,7 @@ const product = {
     discount: '50%',
 };
 
-const HomeSectionCard = ({product}) => {
+const ProductCard = ({product}) => {
 
     return (
         <div className='cursor-pointer mx-auto flex flex-col items-center shadow-md hover:shadow-lg hover:scale-105 duration-500 bg-white rounded-xs overflow-hidden w-[14rem] relative mb-5'>
@@ -32,4 +31,4 @@ const HomeSectionCard = ({product}) => {
     )
 }
 
-export default HomeSectionCard
+export default ProductCard;

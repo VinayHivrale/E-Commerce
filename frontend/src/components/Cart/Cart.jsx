@@ -36,21 +36,6 @@ const Cart = () => {
           <p className="font-semibold font-sans text-sm sm:text-lg ">Party Regular Sleeves Floral Print, Printed Women White...</p>
           <p className='text-xs mr-5'>color: blue</p>
           <div className='xs:flex flex-wrap hidden mt-2'>
-            {/* <div className='xs:flex items-center hidden mr-5'>
-            <label htmlFor='size' className='text-sm mr-2'>Size:</label>
-            <select
-              id='size'
-              value={selectedSize}
-              onChange={handleSizeChange}
-              className='w-10 border border-gray-400 rounded'
-            >
-              {clothingSizes.map((size) => (
-                <option key={size} value={size}>
-                  {size}
-                </option>
-              ))}
-            </select>
-          </div> */}
             <div className='flex items-center mr-5'> 
               <label htmlFor='size' className='text-sm mr-2'>QTY:</label>
               <select

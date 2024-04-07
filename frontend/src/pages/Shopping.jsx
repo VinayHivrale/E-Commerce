@@ -1,13 +1,62 @@
-import CustomDisclosure from '../components/product/CustomDisclosure'; // Adjust the path as per your file structure
-import { Fragment, useState } from 'react'
-import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
+import Disclosure from "../components/product/Disclosure";
+import { Fragment, useEffect, useState } from 'react'
+import { useLocation , useParams } from "react-router-dom"
+import { Dialog, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid';
 import Product from '../components/product/Product';
 import { Pagination } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
+import {useDispatch} from "react-redux";
+import {findProducts} from "../redux/actions/productActions.js"
 
 const Shopping = () => {
+  const location = useLocation();
+  const param = useParams();
+  const dispatch = useDispatch();
+  const decodedQueryString=decodeURIComponent(location.search);
+  const searchParams = new URLSearchParams(decodedQueryString);
+
+  const colorValue = searchParams.get("color");
+  const sizeValue = searchParams.get("size");
+  const priceValue = searchParams.get("price");
+  const discount = searchParams.get("discount");
+  const sortValue = searchParams.get("sort");
+  const pageNumber = searchParams.get("page") || 1;
+  const stock = searchParams.get("stock");
+
+  
+  useEffect(()=>{
+    console.log("hey its working fine go ahead!....");
+    const [minPrice, maxPrice] = priceValue===null?[0,100000]:priceValue.split("-").map(Number);
+    
+    const data ={
+     category: param.levelThree || "",
+     colors:  colorValue || [],
+     sizes: sizeValue || [],
+     minPrice,
+     maxPrice,
+     minDiscount: discount || 0,
+     sort: sortValue || "price_low",
+     pageNumber: pageNumber-1,
+     pageSize: 10,
+     stock: stock || "",
+    }
+  
+    dispatch(findProducts(data))
+
+    
+  },[
+    param.levelThree,
+    colorValue,
+    sizeValue,
+    priceValue,
+    discount,
+    sortValue,
+    pageNumber,
+    stock,
+    ])
+
   const filters = [
     {
       id: 'color',
@@ -36,12 +85,10 @@ const Shopping = () => {
       id: 'size',
       name: 'Size',
       options: [
-        { value: '2l', label: '2L', checked: false },
-        { value: '6l', label: '6L', checked: false },
-        { value: '12l', label: '12L', checked: false },
-        { value: '18l', label: '18L', checked: false },
-        { value: '20l', label: '20L', checked: false },
-        { value: '40l', label: '40L', checked: false },
+        { value: 'S', label: 'S', checked: false },
+        { value: 'M', label: 'M', checked: false },
+        { value: 'L', label: 'L', checked: false },
+        { value: 'XL', label: 'XL', checked: false },
       ],
     },
   ];
@@ -148,7 +195,7 @@ const Shopping = () => {
 
               {/* Filters -----------------------------------------*/}
               <form className="hidden lg:block col-span-1 " onSubmit={(e) => e.preventDefault()}>
-                <CustomDisclosure filters={filters} singleFilters={singleFilters} />
+                <Disclosure filters={filters} singleFilters={singleFilters} />
               </form>
 
 
