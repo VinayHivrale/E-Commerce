@@ -10,7 +10,7 @@ import Sidebar from "../Sidebar/Sidebar";
 import { getUser, logout } from "../../redux/actions/authActions";
 import { Avatar } from "@mui/material";
 import "./Navbar.css";
-import { Outlet, Link,useNavigate } from "react-router-dom";
+import { Outlet, Link, useNavigate } from "react-router-dom";
 import { deepOrange } from "@mui/material/colors";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -23,7 +23,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const jwt = localStorage.getItem("jwt");
   const dispatch = useDispatch();
-  const { auth } = useSelector((store) => store);
+  const { auth, cart } = useSelector((store) => store);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -40,6 +40,7 @@ export default function Navbar() {
   const handleLogout = () => {
     dispatch(logout());
     setIsOpen(false);
+    window.location.reload();
     console.log(auth);
   };
 
@@ -63,19 +64,19 @@ export default function Navbar() {
 
   const quickLinks = [
     {
-      name: "MEN",
+      name: "Men",
       color: "blue",
     },
     {
-      name: "WOMEN",
+      name: "Women",
       color: "yellow",
     },
     {
-      name: "KIDS",
+      name: "Kids",
       color: "red",
     },
     {
-      name: "BEAUTY",
+      name: "Beauty",
       color: "pink",
     },
   ];
@@ -83,48 +84,51 @@ export default function Navbar() {
   return (
     <header>
       <div
-        className=" bg-white text-black w-full h-[80px] flex justify-between fixed top-0 z-10 lg:px-10 "
+        className=" bg-gray-100 text-black w-full h-[80px] flex justify-between fixed top-0 z-10 lg:px-10 "
         onMouseLeave={handleLeave}
       >
-        <div className="hidden my-auto lg:flex flex-shrink-0">
-          <div className="lg:hidden my-auto text-center ml-5">
-            <MenuIcon />
+        <div className="flex">
+          <div className="my-auto flex flex-shrink-0">
+            <img
+              className="ml-5 w-20"
+              src="https://cdn-assets-eu.frontify.com/s3/frontify-enterprise-files-eu/eyJwYXRoIjoid2VhcmVcL2ZpbGVcL1B3WUJiODk0UEhoUHJuZjVZWTNaLnBuZyJ9:weare:IW04UAZrgvnUICRzsXQpMW9SVbdmPbMEWGthhvjvpLI?width=1700&height=966"
+              alt=""
+            />
+
+            {isTrue && selectedCategory && (
+              <Navbarhidden
+                category={selectedCategory}
+                Color={selectedColor}
+                handleLeave={handleLeave}
+              />
+            )}
           </div>
-          <img
-            className="ml-5 w-20"
-            src="https://cdn-assets-eu.frontify.com/s3/frontify-enterprise-files-eu/eyJwYXRoIjoid2VhcmVcL2ZpbGVcL1B3WUJiODk0UEhoUHJuZjVZWTNaLnBuZyJ9:weare:IW04UAZrgvnUICRzsXQpMW9SVbdmPbMEWGthhvjvpLI?width=1700&height=966"
-            alt=""
-          />
 
-          {isTrue && selectedCategory && (
-            <Navbarhidden category={selectedCategory} Color={selectedColor} handleLeave={handleLeave} />
-          )}
-        </div>
-
-        <div className="hidden lg:flex bg-white  justify-evenly align-middle w-[500px] font-sans">
-          {quickLinks.map((links) => (
-            <div
-              key={links.name}
-              className="flex  w-[80px] h-[80px]  justify-center"
-              onMouseOver={() => handleOver(links.name, links.color)}
-              style={{
-                borderBottom:
-                  selectedCategory === links.name
-                    ? `2px solid ${links.color}`
-                    : "",
-              }}
-            >
-              <a
-                className="text-sm no-underline m-auto text-[#333] font-bold block p-[10px]"
-                href="#"
+          <div className="flex  justify-evenly align-middle w-[500px] font-sans">
+            {quickLinks.map((links) => (
+              <div
+                key={links.name}
+                className="flex  w-[80px] h-[80px]  justify-center"
+                onMouseOver={() => handleOver(links.name, links.color)}
+                style={{
+                  borderBottom:
+                    selectedCategory === links.name
+                      ? `2px solid ${links.color}`
+                      : "",
+                }}
               >
-                {links.name}
-              </a>
-            </div>
-          ))}
+                <a
+                  className="text-sm no-underline m-auto text-[#333] font-bold block p-[10px]"
+                  href="#"
+                >
+                  {links.name}
+                </a>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="w-[550px] mr-5 hidden lg:block p-5">
+        {/* <div className="w-[550px] mr-5 hidden lg:block p-5">
           <form
             className="w-full relative flex items-center text-gray-400 focus-within:text-gray-800"
             action=""
@@ -139,10 +143,10 @@ export default function Navbar() {
               <SearchIcon />
             </button>
           </form>
-        </div>
+        </div> */}
 
-        <div className="Navbar-icons hidden lg:flex mt-[20px] items-center w-fit pb-[15px] font-sans">
-          <div className=" text-center text-[12px] ">
+        <div className="Navbar-icons flex mt-[20px] items-center  pb-[15px] font-sans">
+          <div className=" text-center text-[12px] mx-7">
             <div className="relative inline-block text-center text-[12px]">
               <div className=" cursor-pointer" onClick={toggleDropdown}>
                 <Avatar
@@ -161,14 +165,14 @@ export default function Navbar() {
                   <div className="py-1">
                     <Link
                       to={auth.user ? "/" : "/login"}
-                      onClick={auth.user?handleLogout:toggleDropdown}
+                      onClick={auth.user ? handleLogout : toggleDropdown}
                       className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
                     >
                       {auth.user ? "logout" : "login"}
                     </Link>
                     <Link
                       to="/profile"
-                      onClick={auth.user ? handleLogout : toggleDropdown}
+                      onClick={toggleDropdown}
                       className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
                     >
                       Account
@@ -184,78 +188,15 @@ export default function Navbar() {
               <p className="p-0 m-0 font-bold">Wishlist</p>
             </div>
           </Link>
-          <Link to="/cart-bag" className="no-underline mx-7">
-            <div className="text-center text-[12px]">
+          <Link to="/cart" className="no-underline mx-7">
+            <div className="text-center text-[12px] relative">
               <ShoppingCartOutlinedIcon />
-              <p className="p-0 m-0 font-bold">Bag</p>
-            </div>
+              <p className="p-0 m-0 font-bold">Cart</p>
+              {
+                auth.user && cart.cart?.totalItem && <span class=" absolute -top-3 -right-3 -z-10 inline-flex items-center rounded-md bg-purple-50 px-2 py-1 text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-700/10">{cart.cart?.totalItem}</span>
+              }
+           </div>
           </Link>
-        </div>
-      </div>
-
-      <div className="lg:hidden w-full bg-white shadow-xl text-black fixed top-0 z-10 lg:px-10">
-        <div className=" w-full h-[80px] flex justify-between ">
-          <div className=" my-auto flex flex-shrink-0">
-            <div
-              onClick={handleSidebar}
-              className=" cursor-pointer lg:hidden my-auto text-center ml-5"
-            >
-              <MenuIcon />
-            </div>
-            <img
-              className="ml-5 w-20"
-              src="https://cdn-assets-eu.frontify.com/s3/frontify-enterprise-files-eu/eyJwYXRoIjoid2VhcmVcL2ZpbGVcL1B3WUJiODk0UEhoUHJuZjVZWTNaLnBuZyJ9:weare:IW04UAZrgvnUICRzsXQpMW9SVbdmPbMEWGthhvjvpLI?width=1700&height=966"
-              alt=""
-            />
-          </div>
-
-          <div className="Navbar-icons flex mt-[20px] items-center w-fit pb-[15px] font-sans">
-            <div
-              className={` text-center text-[12px] ${
-                searchToggle ? "hidden" : ""
-              } `}
-            >
-              <button onClick={handleSearchToggle}>
-                <SearchIcon />
-                <p className="p-0 m-0 font-bold">Search</p>
-              </button>
-            </div>
-
-            <Link to="/profile" className="no-underline mx-4">
-              <div className=" text-center text-[12px] ">
-                <PersonOutlinedIcon />
-                <p className="p-0 m-0 font-bold">Profile</p>
-              </div>
-            </Link>
-          </div>
-        </div>
-        <div className={searchToggle ? "" : "hidden"}>
-          {" "}
-          {/* Use conditional class based on searchToggle */}
-          <div className="bg-black w-full h-fit p-2 flex items-center">
-            <button type="reset " onClick={handleSearchToggle}>
-              <KeyboardBackspaceIcon sx={{ color: "white" }} />
-            </button>
-
-            <form
-              className="w-full relative flex items-center ml-1 text-gray-400 focus-within:text-gray-800"
-              action=""
-              method="get"
-            >
-              <input
-                className="w-full ml-1 pr-10 rounded-2xl focus:border-0 focus:ring-2 focus:ring-[#353535]"
-                type="text"
-                placeholder="Search..."
-              />
-              <button
-                type="submit"
-                onClick={handleSearchToggle}
-                className="absolute right-3"
-              >
-                <SearchIcon />
-              </button>
-            </form>
-          </div>
         </div>
       </div>
 

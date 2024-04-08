@@ -1,68 +1,68 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Cart from '../components/Cart/Cart';
-import { Link } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux" ;
+import { getCart } from '../redux/actions/cartActions';
 
 const ShoppingCart = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { cart } = useSelector((store) => store);
+
+  const handleCheckout = () => {
+    // Handle checkout logic
+  }
   
+  useEffect(()=>{
+    console.log("calling the get cart ..... ");
+    dispatch(getCart());
+  },[cart.deleteCartItem,cart.updateCartItem]) 
 
   return (
-    <div className='mb-[400px] px-2 md:px-10 font-[sans-serif]'>
-       <div className='mb-7'>
-        <h1 style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' }} className='text-3xl md:text-5xl font-bold'>cart</h1>
-      </div>
-    <div className='lg:flex h-auto'>
-      <div className='w-full mr-5'>
-        <Cart />
-        <Cart />
-      </div>
-      <div className='float-end  lg:float-none w-full h-fit md:w-[50%]'>
-        <div className='bg-[#fcf6f5ff] p-4 shadow-md'>
-          <h2 className='text-lg font-bold mb-2 xs:mb-4'>Price Details</h2>
-
-
-          <div className='flex text-sm md:text-base justify-between mb-2'>
-            <p>Price (item 3)</p>
-            <p>₹4697</p> 
-          </div>
-          <div className='flex text-sm md:text-base  justify-between mb-2'>
-            <p>Discount)</p>
-            <p>-₹2697</p> 
-          </div>
-          <div className='flex text-sm md:text-base  justify-between mb-2'>
-            <p>Delivery Charges</p>
-            <p>Free</p> 
-          </div>
-          <hr className='border-t border-blue-950 mb-4' />
-  
-          <div className='flex text-sm md:text-base font-semibold justify-between '>
-            <p>Total Amount:</p>
-            <p>₹5998</p> 
-          </div>
-          <div className='mt-6'>
-            <button className='w-full text-sm md:text-lg bg-[#2F3C7E] font-semibold text-white px-3 py-1 rounded'>
-              CheckOut
-            </button>
-          </div>
-          <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
-              <p>
-                or
-                <Link to="/">
-                  <button
-                    type="button"
-                    className="ml-1 font-medium text-[#2F3C7E] hover:text-indigo-500"
-                  >
-                    Continue Shopping
-                    <span aria-hidden="true"> &rarr;</span>
-                  </button>
-                </Link>
-              </p>
+    <div className="mb-20 px-2 md:px-10 font-sans">
+      <div className="lg:flex mt-10">
+        <div className="w-full h-screen overflow-y-scroll scroll-auto mr-5">
+          {cart.cart?.cartItems.map((item, index) => (
+            <Cart key={index} item={item} />
+          ))}
+        </div>
+        <div className="float-end lg:float-none w-full h-fit md:w-[50%]">
+          <div className="bg-white p-4 shadow-md">
+            <h2 className="text-lg font-bold mb-4">Price Details</h2>
+            <div className="flex justify-between mb-2">
+              <p>Price (Items {cart.cart?.totalItem})</p>
+              <p>₹{cart.cart?.totalPrice}</p> 
             </div>
+            <div className="flex justify-between mb-2">
+              <p>Discount</p>
+              <p>-₹{cart.cart?.discount}</p> 
+            </div>
+            <div className="flex justify-between mb-2">
+              <p>Delivery Charges</p>
+              <p>Free</p> 
+            </div>
+            <hr className="border-t border-gray-300 mb-4" />
+            <div className="flex justify-between font-semibold">
+              <p>Total Amount:</p>
+              <p>₹{cart.cart?.totalDiscountedPrice}</p> 
+            </div>
+            <div className="mt-6">
+              <button onClick={handleCheckout} className="w-full bg-gray-600 text-white text-lg font-semibold py-2 rounded">
+                Check Out
+              </button>
+            </div>
+            <div className="mt-6 flex justify-center text-sm text-gray-500">
+              <p>or</p>
+              <Link to="/">
+                <button className="ml-1 font-semibold text-gray-500 hover:text-gray-800">
+                  Continue Shopping <span aria-hidden="true">&rarr;</span>
+                </button>
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    </div>
-    
   );
 };
 

@@ -26,6 +26,7 @@ const Login = () => {
     dispatch(login(userData))
     .then(() => {
       navigate('/')
+      window.location.reload();
     })
     .catch((error) => {
       console.error('Error:', error);

@@ -1,17 +1,18 @@
 import Disclosure from "../components/product/Disclosure";
 import { Fragment, useEffect, useState } from 'react'
-import { useLocation , useParams } from "react-router-dom"
+import { useLocation , useParams, useNavigate } from "react-router-dom"
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid';
 import Product from '../components/product/Product';
 import { Pagination } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {findProducts} from "../redux/actions/productActions.js"
 
 const Shopping = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const param = useParams();
   const dispatch = useDispatch();
   const decodedQueryString=decodeURIComponent(location.search);
@@ -22,7 +23,7 @@ const Shopping = () => {
   const priceValue = searchParams.get("price");
   const discount = searchParams.get("discount");
   const sortValue = searchParams.get("sort");
-  const pageNumber = searchParams.get("page") || 1;
+  const pageNumber = parseInt(searchParams.get("page")) || 1;
   const stock = searchParams.get("stock");
 
   
@@ -56,6 +57,15 @@ const Shopping = () => {
     pageNumber,
     stock,
     ])
+
+ const products = useSelector((store)=>store.product.products)
+
+ const handlePaginationChange = (event,value) =>{
+    const searchParams = new URLSearchParams(location.search);
+    searchParams.set("page",value)
+    const query = searchParams.toString();
+    navigate({search:`?${query}`})
+ }
 
   const filters = [
     {
@@ -205,10 +215,10 @@ const Shopping = () => {
             </div>
           </section>
 
-          <div className='flex justify-center items-center -mt-16 mb-7'>
-          <Pagination count={10} variant="outlined" shape="rounded" sx={{color:"#000000",bgcolor:"#BFDBFE"}} />
+          <div className='flex justify-center items-center -mt-16 ml-[200px] mb-7'>
+               <Pagination count={products?.totalPages} variant="outlined" page={pageNumber}  shape="rounded" onChange={handlePaginationChange}  />
           </div>
-
+      
         </main>
       </div>
     </div>

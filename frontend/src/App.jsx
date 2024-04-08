@@ -30,7 +30,7 @@ function App() {
           <Route path="/:levelOne/:levelTwo/:levelThree" element={<Shopping />} />
           <Route path="/order" element={<OrderPage />} />
           <Route path="/checkout" element={<Checkout />} />
-          <Route path="/product/1" element={<ProductDetail />} />
+          <Route path="/api/products/id/:id" element={<ProductDetail />} />
           <Route path="/address-edit" element={<Address />} />
           <Route path="/profile-Edit" element={<ProfileEdit />} />
           <Route path="/profile" element={<Profile />} />

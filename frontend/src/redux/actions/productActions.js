@@ -7,6 +7,7 @@ import {
   FIND_PRODUCT_BY_ID_SUCCESS,
 } from "../constants/productActions";
 import { api } from "../../config/apiConfig";
+import { DateRange } from "@mui/icons-material";
 
 export const findProducts = (reqData) => async (dispatch) => {
   dispatch({ type: FIND_PRODUCTS_REQUEST });
@@ -38,13 +39,15 @@ export const findProducts = (reqData) => async (dispatch) => {
   }
 };
 
-export const findProductsById = (reqData) => async () => {
+export const findProductsById = (reqData) => async (dispatch) => {
   dispatch({ type: FIND_PRODUCT_BY_ID_REQUEST });
 
-  const { productId } = reqData;
+  const   productId = reqData;
+  console.log("productId in actions ",productId);
 
   try {
-    const { data } = api.get(`/api/products/id/${productId}`);
+    const { data } = await api.get(`/api/products/id/${productId}`);
+    console.log(data);
 
     dispatch({ type: FIND_PRODUCT_BY_ID_SUCCESS, payload: data });
   } catch (error) {

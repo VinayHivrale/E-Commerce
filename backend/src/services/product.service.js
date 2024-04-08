@@ -97,7 +97,7 @@ async function getAllProduct(reqQuery) {
   } = reqQuery;
 
   
-  console.log("getting the reqdata in this form ",reqQuery);
+  console.log("getting the reqdata in this form ",pageNumber);
 
   pageSize = pageSize || 10;
 
@@ -161,7 +161,7 @@ if (sizes) {
 
   const totalProducts = await Product.countDocuments(query);
 
-  const skip = Math.max((pageNumber - 1) * pageSize, 0);
+  const skip = Math.max((pageNumber) * pageSize, 0);
 
   query = query.skip(skip).limit(pageSize);
 
@@ -169,7 +169,7 @@ if (sizes) {
   
   const totalPages = Math.ceil(totalProducts / pageSize);
 
-  console.log(products);
+  // console.log(products);
 
   return {content:products,currentPage:pageNumber,totalPages,}
 

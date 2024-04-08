@@ -1,10 +1,10 @@
 const categories = [
     {
-      type: "MEN",
+      type: "Men",
       subType: [
         {
           title: "Topwear",
-          category: ["mens_kurta", "casual shirt", "formal shirt"]
+          category: ["mens_kurta", "casual shirt", "formal shirt","top"]
         },
         {
           title: "Bottoms",
@@ -29,7 +29,7 @@ const categories = [
       ]
     },
     {
-      type: "WOMEN",
+      type: "Women",
       subType: [
         {
           title: "Dresses",
@@ -37,7 +37,7 @@ const categories = [
         },
         {
           title: "Tops",
-          category: ["blouse", "tank top", "sweater", "tunic", "crop top", "hoodie"]
+          category: ["blouse", "top", "sweater", "tunic", "crop top", "hoodie"]
         },
         {
           title: "Bottoms",
@@ -45,7 +45,7 @@ const categories = [
         },
         {
           title: "Outerwear",
-          category: ["jacket", "coat", "blazer", "poncho", "cape", "vest"]
+          category: ["jacket", "coat", "blazer", "saree", "cape", "vest"]
         },
         {
           title: "Activewear",
@@ -62,7 +62,7 @@ const categories = [
       ]
     },
     {
-      type: "BEAUTY",
+      type: "Beauty",
       subType: [
         {
           title: "Skincare",
@@ -91,7 +91,7 @@ const categories = [
       ]
     },
     {
-      type: "KIDS",
+      type: "Kids",
       subType: [
         {
           title: "Clothing",

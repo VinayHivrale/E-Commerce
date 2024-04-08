@@ -1,67 +1,75 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import "./cart.css"
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import {useDispatch} from "react-redux"
+import { getCart, removeCartItem, updateCartItem } from '../../redux/actions/cartActions';
 
-const Cart = () => {
-  const [selectedSize, setSelectedSize] = useState('M'); // Initial size
-  const [selectedQuantity, setSelectedQuantity] = useState(1);
+const Cart = ({ item }) => {
+  const dispatch = useDispatch();
+  
+  const handleUpdateCartItem = (num) => {
+    const data = {
+      data:{quantity:item.quantity+num},
+      cartItemId:item?._id
+    }
+    console.log(item._id);
+     dispatch(updateCartItem(data))
+  }
 
-  const handleSizeChange = (e) => {
-    setSelectedSize(e.target.value);
-  };
-
-  const handleQuantityChange = (e) => {
-    setSelectedQuantity(e.target.value);
-  };
-
-  const clothingSizes = ['S', 'M', 'L', 'XL', 'XXL'];
-  const counts = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // Add or customize sizes as needed
+  const handleRemoveCartItem = () => {
+    dispatch(removeCartItem(item._id))
+    dispatch(getCart());
+  }
+  
 
   return (
-
-    <div className='h-auto p-5 bg-[#fcf6f5ff] cart relative shadow-md w-full mb-5'>
-      {/* Cross Icon */}
-      <div className="absolute top-1 right-3 cursor-pointer text-[#0000005c] hover:text-[#000000a1]">
+    <div className="h-auto p-5 bg-white cart relative shadow-md w-full mb-5  rounded-lg border border-gray-200">
+      <div onClick={handleRemoveCartItem} className="absolute top-1 right-3 cursor-pointer text-gray-500 hover:text-gray-800">
         <CloseRoundedIcon />
       </div>
 
-      <div className='flex'>
+      <div className="flex">
         <img
-          className='w-[5rem] h-[5rem] md:w-[7rem] md:h-[7rem] object-cover object-top pr-5'
-          src='https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcRwNQ6jiZ45uCXbPNiAe8jKqh_yeHDYp_3Igil7-l4aq8zfxQ2tqsaHWPgqMXVJkFCPvBnfCj3Y8K3T1quL7CIfz6Bte_t5PXL3YCI4xGs&usqp=CAE'
+          className="w-[150px] h-[150px] object-cover object-top mr-4"
+          src={`${item.product?.imageUrl}`}
           alt="Product"
         />
-        <div className='flex flex-col justify-between'>
-          <p className="font-semibold font-sans text-sm sm:text-lg ">Party Regular Sleeves Floral Print, Printed Women White...</p>
-          <p className='text-xs mr-5'>color: blue</p>
-          <div className='xs:flex flex-wrap hidden mt-2'>
-            <div className='flex items-center mr-5'> 
-              <label htmlFor='size' className='text-sm mr-2'>QTY:</label>
-              <select
-                id='quantity'
-                value={selectedQuantity}
-                onChange={handleQuantityChange}
-                className='w-10 border p-1 text-xs border-gray-400 rounded'
-              >
-                {counts.map((count) => (
-                  <option key={count} value={count}>
-                    {count}
-                  </option>
-                ))}
-              </select>
-            </div>
-
+        <div className="flex flex-col justify-between w-full">
+          <div>
+            <p className="font-semibold text-lg text-gray-800">
+              {item.product?.title}
+            </p>
+            <p className="text-sm text-gray-600">
+              {item.product?.brand} | {item.product?.color} | {item.size}
+            </p>
           </div>
-          <p className='mt-3 text-xs sm:text-sm font-[500] text-gray-900'>Rs.719 <span className='line-through text-gray-300'>Rs.1199</span> <span className='text-[#50d71e]'>(40% OFF)</span></p>
+
+          <div className="flex  items-center mt-2">
+            <button type="button" disabled={item.quantity<=1} onClick={()=>handleUpdateCartItem(-1)}  className="focus:outline-none bg-gray-200 rounded-md p-2">
+              <RemoveIcon className="w-4 h-4 text-gray-700" />
+            </button>
+            <div className="text-lg font-semibold text-gray-700 mx-3">{item.quantity}</div>
+            <button type="button" onClick={()=>handleUpdateCartItem(1)} className="focus:outline-none bg-gray-200 rounded-md p-2">
+              <AddIcon className="w-4 h-4 text-gray-700" />
+            </button>
+          </div>
+
+          <p className="mt-1 text-sm font-semibold text-gray-700">
+            Rs.{item.product?.discountedPrice}{" "}
+            <span className="line-through text-gray-400">
+              Rs.{item.product?.price}
+            </span>{" "}
+            <span className="text-green-500">
+              ({item.product?.discountPercent}% OFF)
+            </span>
+          </p>
         </div>
       </div>
     </div>
-
   );
 };
 
 export default Cart;
-
-
-

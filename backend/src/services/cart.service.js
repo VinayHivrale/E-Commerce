@@ -56,6 +56,8 @@ async function findUserCart(userId){
 
 async function addCartItem(userId,req) {
   try {
+
+      console.log("addCartItem.... in backen",req.productId);
       const cart = await Cart.findOne({user:userId});
       const product = await Product.findById(req.productId);
 
