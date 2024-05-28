@@ -40,6 +40,7 @@ export default function Navbar() {
   const handleLogout = () => {
     dispatch(logout());
     setIsOpen(false);
+    navigate('/');
     window.location.reload();
     console.log(auth);
   };
@@ -84,14 +85,14 @@ export default function Navbar() {
   return (
     <header>
       <div
-        className=" bg-gray-100 text-black w-full h-[80px] flex justify-between fixed top-0 z-10 lg:px-10 "
+        className=" bg-gray-50 text-black w-full h-[80px] flex justify-between fixed top-0 z-10 lg:px-10 "
         onMouseLeave={handleLeave}
       >
         <div className="flex">
           <div className="my-auto flex flex-shrink-0">
             <img
-              className="ml-5 w-20"
-              src="https://cdn-assets-eu.frontify.com/s3/frontify-enterprise-files-eu/eyJwYXRoIjoid2VhcmVcL2ZpbGVcL1B3WUJiODk0UEhoUHJuZjVZWTNaLnBuZyJ9:weare:IW04UAZrgvnUICRzsXQpMW9SVbdmPbMEWGthhvjvpLI?width=1700&height=966"
+              className="ml-5 w-16"
+              src=""
               alt=""
             />
 
@@ -152,7 +153,7 @@ export default function Navbar() {
                 <Avatar
                   className="text-black"
                   sx={{
-                    bgcolor: deepOrange[400],
+                    bgcolor: "#f06292",
                     color: "black",
                     cursor: "pointer",
                   }}

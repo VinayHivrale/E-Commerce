@@ -2,10 +2,10 @@ import cartService from "../services/cart.service.js";
 
 const findUserCart = async(req,res) => {
     const user = req.user;
-    console.log("getting user in the cartController ",user );
+   // console.log("getting user in the cartController ",user );
     try {
         const cart = await cartService.findUserCart(user._id);
-        console.log("cart in the cartController ",cart);
+      //  console.log("cart in the cartController ",cart);
         return res.status(200).send(cart);
     } catch (error) {
         return res.status(500).send({error:error.message});

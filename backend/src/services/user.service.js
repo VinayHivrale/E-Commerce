@@ -6,7 +6,7 @@ const createUser = async (userData) => {
   try {
     let { firstName, lastName, email, password } = userData;
     const isUserExist = await User.findOne({ email });
-
+    
     if (isUserExist) {
       throw new Error("user already exist with email : ", email);
     }
@@ -25,7 +25,7 @@ const createUser = async (userData) => {
 
 const findUserById = async (userId) => {
   try {
-    const user = await User.findById(userId);
+    const user = await User.findById(userId).populate("address");
     
     if (!user) {
       throw new Error("user not found with id : ", userId);

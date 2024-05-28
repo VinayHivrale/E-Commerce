@@ -10,7 +10,7 @@ const ShoppingCart = () => {
   const { cart } = useSelector((store) => store);
 
   const handleCheckout = () => {
-    // Handle checkout logic
+    navigate("/checkout?step=2");
   }
   
   useEffect(()=>{
@@ -19,9 +19,9 @@ const ShoppingCart = () => {
   },[cart.deleteCartItem,cart.updateCartItem]) 
 
   return (
-    <div className="mb-20 px-2 md:px-10 font-sans">
+    <div className=" px-2 md:px-10 font-sans">
       <div className="lg:flex mt-10">
-        <div className="w-full h-screen overflow-y-scroll scroll-auto mr-5">
+        <div className="w-full h-[85vh] overflow-y-scroll scroll-auto mr-5">
           {cart.cart?.cartItems.map((item, index) => (
             <Cart key={index} item={item} />
           ))}
@@ -48,7 +48,7 @@ const ShoppingCart = () => {
             </div>
             <div className="mt-6">
               <button onClick={handleCheckout} className="w-full bg-gray-600 text-white text-lg font-semibold py-2 rounded">
-                Check Out
+                checkout
               </button>
             </div>
             <div className="mt-6 flex justify-center text-sm text-gray-500">

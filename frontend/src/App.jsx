@@ -19,12 +19,14 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import OrderPage from "./pages/OrderPage";
 import OrderDetail from "./components/OrderDetails/OrderDetail";
+import Success from "./pages/Success";
 
 function App() {
   return (
     <div className="App">
-      <Navbar />
-      <div className="pt-20">
+      <div className="mb-[85px]">
+      <Navbar/>
+      </div>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/:levelOne/:levelTwo/:levelThree" element={<Shopping />} />
@@ -39,8 +41,8 @@ function App() {
           <Route path="/registration" element={<Registration />} />
           <Route path="/products" element={<Shopping />} />
           <Route path="/order-Detail" element={<OrderDetail />} />
+          <Route path="/success" element={<Success/>}/>
         </Routes>
-      </div>
     </div>
   );
 }

@@ -1,19 +1,23 @@
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { useLocation } from "react-router-dom";
-import PersonIcon from "@mui/icons-material/Person";
-import PhoneIcon from "@mui/icons-material/Phone";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import AddressCard from "./AddressCard";
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import Cart from "../Cart/Cart";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { createOrder } from "../../redux/actions/orderActions";
+import OrderSummary from "./OrderSummary";
+import { colors } from "@mui/material";
+import { getUser } from "../../redux/actions/authActions";
 
 const steps = ["Login", "Dilivery address", "Order summary", "Payment"];
 
 const Checkout = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const jwt = localStorage.getItem("jwt");
+  const { auth } = useSelector((store) => store);
   const [isSave, setIsSave] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const location = useLocation();
@@ -35,7 +39,11 @@ const Checkout = () => {
       zipCode: data.get("zip"),
       mobile: data.get("phoneNumber"),
     };
-
+    const orderData = {
+      address,
+      navigate,
+    };
+    dispatch(createOrder(orderData));
     console.log(address);
   };
 
@@ -47,44 +55,50 @@ const Checkout = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
+  useEffect(() => {
+    if (jwt) {
+      dispatch(getUser(jwt));
+    }
+  }, [jwt]);
+
   return (
     <div>
-      <Box className="my-7">
+      <Box className="my-7 mx-auto" style={{ width: "50%" }}>
         <Stepper activeStep={step} alternativeLabel>
           {steps.map((label) => (
             <Step key={label}>
-              <StepLabel>{label}</StepLabel>
+              <StepLabel sx={{ color: "gray" }}>{label}</StepLabel>
             </Step>
           ))}
         </Stepper>
       </Box>
 
-      {step == 2 ? (
+      {step == 2 && (
         <div className="font-[sans-serif] bg-gray-50">
           <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-4 h-full">
-            <div className="bg-[#3f3f3f] lg:h-screen lg:sticky lg:top-0">
-              <div className="relative h-full">
-                <div className=" px-4 py-8 h-[400px] overflow-auto lg:h-[calc(100vh-0px)]">
+            <div className="bg-[#3f3f3f] lg:sticky lg:top-0">
+              <div className="relative h-[579px]">
+                <div className=" px-4 py-8 overflow-auto">
                   <h2 className="text-2xl font-bold text-white">Address</h2>
-                  <form>
+                  {auth.user?.address?.map((address) => (
                     <div className="space-y-3 bg-white mt-10 p-5 cursor-pointer">
-                      <AddressCard />
+                      <AddressCard address={address}/>
                       <button
-                        type="submit"
+                        type="button"
                         className=" bg-gray-400 hover:bg-slate-950 text-white p-2  font-semibold rounded-md"
                       >
                         Deliver Here
                       </button>
                     </div>
-                  </form>
+                  ))}
                 </div>
               </div>
             </div>
-            <div className="xl:col-span-2 h-max rounded-md p-8 sticky top-0">
+            <div className="xl:col-span-2 rounded-md py-8 sticky pr-10 top-0">
               <h2 className="text-2xl font-bold text-[#333]">
                 Complete your order
               </h2>
-              <form className="mt-10" onSubmit={handleSubmit}>
+              <form className="mt-5" onSubmit={handleSubmit}>
                 <div>
                   <h3 className="text-lg font-bold text-[#333] mb-6">
                     Personal Details
@@ -180,67 +194,9 @@ const Checkout = () => {
             </div>
           </div>
         </div>
-      ) : (
-        <div className="px-20">
-          <div className="p-5 shadow-md">
-            <AddressCard />
-          </div>
-          <div className="grid grid-cols-5 gap-2 mt-5">
-            <div className="col-span-3">
-              {[1, 1].map((itme) => (
-                <Cart />
-              ))}
-            </div>
-            <div className="col-span-2">
-              <div className="">
-                <div className="bg-[#fcf6f5ff] p-4 shadow-md">
-                  <h2 className="text-lg font-bold mb-2 xs:mb-4">
-                    Price Details
-                  </h2>
-
-                  <div className="flex text-sm md:text-base justify-between mb-2">
-                    <p>Price (item 3)</p>
-                    <p>₹4697</p>
-                  </div>
-                  <div className="flex text-sm md:text-base  justify-between mb-2">
-                    <p>Discount)</p>
-                    <p>-₹2697</p>
-                  </div>
-                  <div className="flex text-sm md:text-base  justify-between mb-2">
-                    <p>Delivery Charges</p>
-                    <p>Free</p>
-                  </div>
-                  <hr className="border-t border-blue-950 mb-4" />
-
-                  <div className="flex text-sm md:text-base font-semibold justify-between ">
-                    <p>Total Amount:</p>
-                    <p>₹5998</p>
-                  </div>
-                  <div className="mt-6">
-                    <button className="w-full text-sm md:text-lg bg-[#2F3C7E] font-semibold text-white px-3 py-1 rounded">
-                      Payment
-                    </button>
-                  </div>
-                  <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
-                    <p>
-                      or
-                      <Link to="/">
-                        <button
-                          type="button"
-                          className="ml-1 font-medium text-[#2F3C7E] hover:text-indigo-500"
-                        >
-                          Continue Shopping
-                          <span aria-hidden="true"> &rarr;</span>
-                        </button>
-                      </Link>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       )}
+
+      {step == 3 && <OrderSummary />}
     </div>
   );
 };

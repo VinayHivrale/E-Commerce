@@ -15,15 +15,15 @@ async function createCart(user) {
 async function findUserCart(userId){
     try {
       
-      console.log("user id in the findusercart ",userId);
+     // console.log("user id in the findusercart ",userId);
 
       let cart = await Cart.findOne({user:userId});
 
-      console.log("after find one ", cart.cartItems.length);     
+     // console.log("after find one ", cart.cartItems.length);     
 
       let cartItems = await CartItem.find({cart:cart._id}).populate("product");
 
-      console.log("error after find", cartItems);
+     // console.log("error after find", cartItems);
 
       cart.cartItems = cartItems;
 
@@ -43,7 +43,7 @@ async function findUserCart(userId){
       cart.totalItem = totalItem;
 
 
-      console.log("cart in the finduser cart before return ",cart.cartItems);
+   //   console.log("cart in the finduser cart before return ",cart.cartItems);
 
       return cart;
 
@@ -57,11 +57,11 @@ async function findUserCart(userId){
 async function addCartItem(userId,req) {
   try {
 
-      console.log("addCartItem.... in backen",req.productId);
+     // console.log("addCartItem.... in backen",req.productId);
       const cart = await Cart.findOne({user:userId});
       const product = await Product.findById(req.productId);
 
-      const isPresent = await CartItem.findOne({cart:cart._id, product:product._id, userId });
+      const isPresent = await CartItem.findOne({cart:cart._id, product:product._id, userId, size:req.size });
 
       
 
